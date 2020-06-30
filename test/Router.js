@@ -44,7 +44,7 @@ describe('Router', function(){
     var router = new Router();
 
     router.use(function (req, res) {
-      false.should.be.true()
+      false.should.be.true() // notes: 这里不会执行
     });
 
     router.handle({ url: '', method: 'GET' }, {}, done);
@@ -93,7 +93,7 @@ describe('Router', function(){
     })
   })
 
-  describe('.multiple callbacks', function(){
+  describe('.multiple callbacks', function(){ // 看到这
     it('should throw if a callback is null', function(){
       assert.throws(function () {
         var router = new Router();
