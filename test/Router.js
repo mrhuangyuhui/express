@@ -6,6 +6,85 @@ var express = require('../')
   , assert = require('assert');
 
 describe('Router', function(){
+  it('Express 中间件线性模型演示', function(done) {
+
+    var myRouter = new Router();
+
+    myRouter.use('/', function m1(req, res,next) {
+      console.log('m1-start')
+      setTimeout(function () {
+        next()
+      }, 0)
+      console.log('m1-end')
+    })
+
+    myRouter.use('/', function m2(req, res,next) {
+      console.log('m2-start')
+      setTimeout(function () {
+        next()
+      }, 0)
+      console.log('m2-end')
+    })
+
+    var myRoute = myRouter.route('/')
+
+    myRoute.get(function m3(req, res, next) {
+      console.log('m3-start')
+      setTimeout(function () {
+        next()
+      }, 0)
+      console.log('m3-end')
+    })
+
+    myRoute.get(function m4(req, res, next) {
+      console.log('m4-start')
+      setTimeout(function () {
+        next()
+      }, 0)
+      console.log('m4-end')
+    })
+
+    var anotherRouter = new Router()
+
+    myRouter.use('/', anotherRouter)
+
+    anotherRouter.use('/', function m5(req, res,next) {
+      console.log('m5-start')
+      setTimeout(function () {
+        next()
+      }, 0)
+      console.log('m5-end')
+    })
+
+    anotherRouter.use('/', function m6(req, res,next) {
+      console.log('m6-start')
+      setTimeout(function () {
+        next()
+      }, 0)
+      console.log('m6-end')
+    })
+
+    var anotherRoute = anotherRouter.route('/')
+
+    anotherRoute.get(function m7(req, res, next) {
+      console.log('m7-start')
+      setTimeout(function () {
+        next()
+      }, 0)
+      console.log('m7-end')
+    })
+
+    anotherRoute.get(function m8(req, res, next) {
+      console.log('m8-start')
+      setTimeout(function () {
+        res.end()
+      }, 0)
+      console.log('m8-end')
+    })
+
+    myRouter.handle({ url: '/', method: 'GET' }, { end: done });
+  });
+
   it('should return a function with router methods', function() {
     var router = new Router();
     assert(typeof router === 'function')
